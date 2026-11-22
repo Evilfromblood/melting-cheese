@@ -15,7 +15,7 @@ import { FALLBACK_MENU_ITEMS } from '@/lib/menu-data';
 import { createClient } from '@/lib/supabase/client';
 import { MenuItem, Order } from '@/types';
 import { useCart } from '@/context/CartContext';
-import { ArrowRight, CheckCircle2, MessageCircle, MapPin, Phone } from 'lucide-react';
+import { ArrowRight, CheckCircle2, MessageCircle, MapPin, Phone, Sparkles } from 'lucide-react';
 
 const CATEGORIES = [
   'Pizza',
@@ -40,7 +40,7 @@ function PromoUrlListener() {
 }
 
 export default function StorefrontPage() {
-  const { totalItemsCount, total, setIsCartOpen, toastMessage } = useCart();
+  const { totalItemsCount, total, subtotal, promoUnlocked, promoTargetRemaining, setIsCartOpen, toastMessage } = useCart();
   const supabase = createClient();
 
   const [menuItems, setMenuItems] = useState<MenuItem[]>(FALLBACK_MENU_ITEMS);
@@ -213,7 +213,32 @@ export default function StorefrontPage() {
 
       {/* Sticky Bottom Floating Checkout Bar (Swiggy/Zomato style) */}
       {totalItemsCount > 0 && (
-        <div className="fixed bottom-4 left-4 right-4 z-40 max-w-lg mx-auto animate-in slide-in-from-bottom-4 duration-200">
+        <div className="fixed bottom-4 left-4 right-4 z-40 max-w-lg mx-auto animate-in slide-in-from-bottom-4 duration-200 space-y-1.5">
+          {/* Live Offer Progress Strip */}
+          <div
+            onClick={() => setIsCartOpen(true)}
+            className={`px-3.5 py-1.5 rounded-xl text-[11px] font-bold flex items-center justify-between shadow-lg backdrop-blur-md border cursor-pointer active:scale-[0.99] transition-all ${
+              promoUnlocked
+                ? 'bg-emerald-950/95 text-emerald-300 border-emerald-500/50'
+                : 'bg-[#18181b]/95 text-amber-300 border-amber-500/35'
+            }`}
+          >
+            {promoUnlocked ? (
+              <span className="flex items-center gap-1.5 truncate">
+                <span>🎉</span>
+                <span>DIRECT50 Unlocked: You saved ₹50 + FREE Fries added!</span>
+              </span>
+            ) : (
+              <span className="flex items-center gap-1.5 truncate">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span>DIRECT50 active! Add ₹{promoTargetRemaining} more for ₹50 OFF + FREE Fries</span>
+              </span>
+            )}
+            <span className="text-[10px] font-mono font-black text-amber-400 shrink-0 ml-1.5">
+              ₹{subtotal}/₹299
+            </span>
+          </div>
+
           <button
             onClick={() => setIsCartOpen(true)}
             className="w-full p-3.5 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black rounded-2xl shadow-2xl shadow-amber-500/30 flex items-center justify-between active:scale-[0.98] transition-all border border-amber-300/40"

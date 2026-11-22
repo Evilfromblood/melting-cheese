@@ -39,8 +39,8 @@ const PROMO_FREE_ITEM = '1x FREE Salted Fries';
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [promoCode, setPromoCode] = useState<string>('');
-  const [isPromoApplied, setIsPromoApplied] = useState<boolean>(false);
+  const [promoCode, setPromoCode] = useState<string>(PROMO_NAME);
+  const [isPromoApplied, setIsPromoApplied] = useState<boolean>(true);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -58,7 +58,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [toastMessage]);
 
-  // Load cart and check URL promo on mount
+  // Load cart and ensure DIRECT50 promo is auto-applied by default
   useEffect(() => {
     try {
       const savedCart = localStorage.getItem('melting_cheese_cart');
@@ -66,22 +66,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setItems(JSON.parse(savedCart));
       }
 
-      const savedPromo = localStorage.getItem('melting_cheese_promo');
-      if (savedPromo === PROMO_NAME) {
-        setPromoCode(PROMO_NAME);
-        setIsPromoApplied(true);
-      }
-
-      // Check URL parameters
-      if (typeof window !== 'undefined') {
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlPromo = urlParams.get('promo');
-        if (urlPromo && urlPromo.toUpperCase() === PROMO_NAME) {
-          setPromoCode(PROMO_NAME);
-          setIsPromoApplied(true);
-          localStorage.setItem('melting_cheese_promo', PROMO_NAME);
-        }
-      }
+      // Automatically apply DIRECT50 by default
+      setPromoCode(PROMO_NAME);
+      setIsPromoApplied(true);
+      localStorage.setItem('melting_cheese_promo', PROMO_NAME);
     } catch (e) {
       console.warn('Error reading cart from localStorage', e);
     } finally {

@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { X, Trash2, Plus, Minus, Tag, Gift, ArrowRight, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react';
+import React from 'react';
+import { X, Trash2, Plus, Minus, Gift, Sparkles, CheckCircle2, AlertCircle, ArrowRight } from 'lucide-react';
 import { useCart, MAX_ITEM_QTY, MAX_ORDER_ITEMS } from '@/context/CartContext';
 import confetti from 'canvas-confetti';
 
@@ -31,32 +31,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onCheckout }) => {
     isOrderCapReached,
   } = useCart();
 
-  const [inputCode, setInputCode] = useState('');
-  const [promoMessage, setPromoMessage] = useState<{ text: string; isError: boolean } | null>(null);
-
   if (!isCartOpen) return null;
-
-  const handleApplyPromo = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputCode.trim()) return;
-
-    const res = applyPromo(inputCode);
-    setPromoMessage({ text: res.message, isError: !res.success });
-    if (res.success) {
-      setInputCode('');
-      if (subtotal >= 299) {
-        try {
-          confetti({
-            particleCount: 50,
-            spread: 60,
-            origin: { y: 0.7 },
-          });
-        } catch {
-          // ignore
-        }
-      }
-    }
-  };
 
   const progressPercentage = Math.min(100, Math.round((subtotal / 299) * 100));
 
@@ -130,77 +105,48 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onCheckout }) => {
             </div>
           ) : (
             <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
-              {/* Promo Banner / Progress Bar */}
-              <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/25 space-y-2">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span className="text-xs font-bold text-amber-300">
-                      Box-Insert Promo: DIRECT50
-                    </span>
+              {/* Offer Progress Card */}
+              <div
+                className={`p-3.5 rounded-2xl border transition-all ${
+                  promoUnlocked
+                    ? 'bg-emerald-950/40 border-emerald-500/40'
+                    : 'bg-amber-500/10 border-amber-500/25'
+                }`}
+              >
+                {promoUnlocked ? (
+                  <div className="flex items-center gap-2.5 text-xs font-bold text-emerald-400">
+                    <span className="text-base shrink-0">🎉</span>
+                    <div className="flex-1">
+                      <div className="text-emerald-300 font-extrabold text-xs">
+                        🎉 DIRECT50 Unlocked!
+                      </div>
+                      <div className="text-[11px] text-emerald-400/90 font-medium">
+                        You saved ₹50 + FREE Salted Fries added!
+                      </div>
+                    </div>
                   </div>
-                  {isPromoApplied ? (
-                    <button
-                      onClick={removePromo}
-                      className="text-[10px] text-stone-400 hover:text-rose-400 underline"
-                    >
-                      Remove
-                    </button>
-                  ) : null}
-                </div>
-
-                {isPromoApplied ? (
-                  promoUnlocked ? (
-                    <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 bg-emerald-950/40 p-2 rounded-xl border border-emerald-800/40">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                      <span>Unlocked! ₹50 OFF + FREE Salted Fries added!</span>
-                    </div>
-                  ) : (
-                    <div className="space-y-1.5">
-                      <div className="text-xs text-stone-300 flex justify-between">
-                        <span>Add ₹{promoTargetRemaining} more to unlock perk:</span>
-                        <span className="font-bold text-amber-400">₹{subtotal}/₹299</span>
-                      </div>
-                      <div className="w-full bg-stone-800 h-2 rounded-full overflow-hidden">
-                        <div
-                          className="bg-gradient-to-r from-amber-500 to-emerald-400 h-full rounded-full transition-all duration-300"
-                          style={{ width: `${progressPercentage}%` }}
-                        />
-                      </div>
-                      <div className="text-[11px] text-stone-400 flex items-center gap-1">
-                        <Gift className="w-3 h-3 text-amber-400" />
-                        <span>Unlocks ₹50 Instant Discount + 1x FREE Salted Fries</span>
-                      </div>
-                    </div>
-                  )
                 ) : (
-                  <form onSubmit={handleApplyPromo} className="flex gap-2 pt-1">
-                    <div className="relative flex-1">
-                      <Tag className="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
-                      <input
-                        type="text"
-                        placeholder="Enter DIRECT50"
-                        value={inputCode}
-                        onChange={(e) => setInputCode(e.target.value)}
-                        className="w-full pl-8 pr-2 py-1.5 bg-stone-900 border border-stone-800 rounded-xl text-xs text-white uppercase placeholder:text-stone-500 focus:outline-none focus:border-amber-500"
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-1.5 font-bold text-amber-300">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span>DIRECT50 active!</span>
+                      </div>
+                      <span className="font-mono font-bold text-amber-400 text-[11px]">
+                        ₹{subtotal} / ₹299
+                      </span>
+                    </div>
+
+                    <div className="text-xs text-stone-300 font-medium leading-tight">
+                      DIRECT50 active! Add <span className="font-extrabold text-amber-400">₹{promoTargetRemaining}</span> more to unlock <span className="text-white font-bold">₹50 OFF + FREE Salted Fries</span>
+                    </div>
+
+                    <div className="w-full bg-stone-800/80 h-2 rounded-full overflow-hidden border border-stone-700/40">
+                      <div
+                        className="bg-gradient-to-r from-amber-500 to-amber-400 h-full rounded-full transition-all duration-300"
+                        style={{ width: `${progressPercentage}%` }}
                       />
                     </div>
-                    <button
-                      type="submit"
-                      className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-stone-950 rounded-xl text-xs font-bold transition-colors"
-                    >
-                      Apply
-                    </button>
-                  </form>
-                )}
-
-                {promoMessage && (
-                  <div
-                    className={`text-[11px] ${
-                      promoMessage.isError ? 'text-rose-400' : 'text-emerald-400'
-                    }`}
-                  >
-                    {promoMessage.text}
                   </div>
                 )}
               </div>

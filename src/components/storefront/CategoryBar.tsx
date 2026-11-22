@@ -83,7 +83,7 @@ export const CategoryBar: React.FC<CategoryBarProps> = ({
         </div>
 
         {/* Categories Horizontal Scroll */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+        <div className="-mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 scroll-pl-4 sm:scroll-pl-6">
           {/* All Items */}
           <button
             onClick={() => onSelectCategory('All')}

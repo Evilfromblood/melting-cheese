@@ -81,17 +81,17 @@ export const Header: React.FC = () => {
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-2 min-w-0">
         {/* Custom Brand Logo */}
-        <div className="flex flex-col">
-          <Link href="/" className="group">
+        <div className="min-w-0 flex-1 flex flex-col pr-1">
+          <Link href="/" className="group inline-block">
             <BrandLogo size="md" showText={true} />
           </Link>
 
           {/* Delivery & Status badges */}
-          <div className="mt-1 flex items-center gap-2 text-[11px] text-stone-300">
+          <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-stone-300 whitespace-nowrap overflow-hidden">
             {isStoreOpen ? (
-              <div className="flex items-center gap-1 text-emerald-400 font-semibold">
+              <div className="flex items-center gap-1 text-emerald-400 font-semibold shrink-0">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -99,33 +99,33 @@ export const Header: React.FC = () => {
                 <span>Open</span>
               </div>
             ) : (
-              <div className="flex items-center gap-1 text-rose-400 font-semibold">
+              <div className="flex items-center gap-1 text-rose-400 font-semibold shrink-0">
                 <span className="relative flex h-2 w-2">
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
                 </span>
                 <span>Closed</span>
               </div>
             )}
-            <span className="text-stone-600">•</span>
-            <div className="flex items-center gap-1 text-stone-400">
+            <span className="text-stone-600 shrink-0">•</span>
+            <div className="flex items-center gap-1 text-stone-400 shrink-0">
               <Clock className="w-3 h-3" />
-              <span>Till 12:00 AM</span>
+              <span>Till 12 AM</span>
             </div>
-            <span className="text-stone-600">•</span>
-            <div className="flex items-center gap-1 text-stone-400">
+            <span className="hidden sm:inline text-stone-600 shrink-0">•</span>
+            <div className="hidden sm:flex items-center gap-1 text-stone-400 min-w-0">
               <MapPin className="w-3 h-3 text-amber-400 shrink-0" />
-              <span className="truncate max-w-[120px] sm:max-w-none">Sant Ravidas Nagar, Bhadohi</span>
+              <span className="truncate">Sant Ravidas Nagar, Bhadohi</span>
             </div>
           </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="flex items-center gap-2 sm:gap-2.5">
+        <div className="shrink-0 flex items-center gap-1.5 sm:gap-2">
           {/* Customer Auth Button: Login / Account */}
           {customerUser ? (
             <Link
               href="/account"
-              className="px-3 py-1.5 rounded-2xl bg-stone-900 border border-amber-500/40 text-amber-400 hover:bg-stone-800 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm"
+              className="w-8 h-8 sm:w-auto sm:px-3 sm:py-1.5 rounded-2xl bg-stone-900 border border-amber-500/40 text-amber-400 hover:bg-stone-800 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-sm"
               title="My Account & Orders"
             >
               <User className="w-3.5 h-3.5" />
@@ -134,7 +134,7 @@ export const Header: React.FC = () => {
           ) : (
             <Link
               href="/login"
-              className="px-3 py-1.5 rounded-2xl bg-stone-900 border border-stone-800 hover:border-amber-500/50 text-stone-300 hover:text-white text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm"
+              className="w-8 h-8 sm:w-auto sm:px-3 sm:py-1.5 rounded-2xl bg-stone-900 border border-stone-800 hover:border-amber-500/50 text-stone-300 hover:text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-sm"
               title="Customer Login / Sign Up"
             >
               <User className="w-3.5 h-3.5" />
@@ -145,18 +145,18 @@ export const Header: React.FC = () => {
           {/* Quick Call */}
           <a
             href={`tel:+${phone}`}
-            className="w-9 h-9 rounded-2xl bg-stone-900 border border-stone-800 hover:border-amber-500/50 flex items-center justify-center text-stone-300 hover:text-white transition-all shadow-sm active:scale-95"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-stone-900 border border-stone-800 hover:border-amber-500/50 flex items-center justify-center text-stone-300 hover:text-white transition-all shadow-sm active:scale-95"
             title="Call Restaurant"
           >
-            <Phone className="w-4 h-4 text-emerald-400" />
+            <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />
           </a>
 
-          {/* Quick WhatsApp */}
+          {/* Quick WhatsApp (desktop - floating button serves mobile) */}
           <a
             href={`https://wa.me/${phone}?text=${encodeURIComponent("Hi Melting Cheese, I would like to place an order.")}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-2xl bg-stone-900 border border-stone-800 hover:border-emerald-500/50 flex items-center justify-center text-stone-300 hover:text-white transition-all shadow-sm active:scale-95"
+            className="hidden sm:flex w-9 h-9 rounded-2xl bg-stone-900 border border-stone-800 hover:border-emerald-500/50 items-center justify-center text-stone-300 hover:text-white transition-all shadow-sm active:scale-95"
             title="Chat on WhatsApp Business"
           >
             <MessageCircle className="w-4 h-4 text-emerald-400" />
@@ -165,11 +165,11 @@ export const Header: React.FC = () => {
           {/* Cart Floating Button */}
           <button
             onClick={() => setIsCartOpen(true)}
-            className="relative px-3.5 py-2 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 text-stone-950 font-black flex items-center gap-2 shadow-lg shadow-amber-500/25 hover:from-amber-400 hover:to-amber-500 active:scale-95 transition-all"
+            className="relative px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 text-stone-950 font-black flex items-center gap-1.5 sm:gap-2 shadow-lg shadow-amber-500/25 hover:from-amber-400 hover:to-amber-500 active:scale-95 transition-all shrink-0"
             aria-label="View Cart"
           >
             <ShoppingBag className="w-4 h-4" />
-            <span className="text-sm font-black">{totalItemsCount}</span>
+            <span className="text-xs sm:text-sm font-black">{totalItemsCount}</span>
           </button>
         </div>
       </div>

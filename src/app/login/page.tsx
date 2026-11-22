@@ -86,8 +86,8 @@ function LoginContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#121214] flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md bg-[#18181b] border border-stone-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+    <div className="min-h-screen min-h-dvh bg-[#121214] flex flex-col items-center pt-6 sm:pt-14 pb-24 px-4 overflow-y-auto">
+      <div className="w-full max-w-md bg-[#18181b] border border-stone-800 rounded-3xl p-5 sm:p-8 shadow-2xl space-y-5 sm:space-y-6">
         {/* Navigation back */}
         <div className="flex items-center justify-between">
           <Link
@@ -108,9 +108,9 @@ function LoginContent() {
         </div>
 
         {/* Brand Logo Header */}
-        <div className="text-center flex flex-col items-center space-y-2">
-          <BrandLogo size="lg" />
-          <p className="text-xs text-stone-400 mt-1">
+        <div className="text-center flex flex-col items-center space-y-1.5">
+          <BrandLogo size="md" />
+          <p className="text-xs text-stone-400 mt-0.5">
             {mode === 'signin'
               ? 'Sign in to track orders & auto-fill saved address'
               : 'Create an account to save Bhadohi address & track orders'}
