@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
-import { X, Navigation, Smartphone, Banknote, QrCode, ArrowRight, Loader2, Check, AlertTriangle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Navigation, Smartphone, Banknote, QrCode, ArrowRight, Loader2, Check, AlertTriangle, UserCheck } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useCart } from '@/context/CartContext';
 import { generateUpiLink } from '@/lib/upi';
 import { formatWhatsAppOrderMessage } from '@/lib/whatsapp';
 import { createClient } from '@/lib/supabase/client';
 import { Order, OrderItemSummary, PaymentMethod } from '@/types';
+import type { User } from '@supabase/supabase-js';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -23,15 +24,55 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const { items, subtotal, discount, freeItem, total, clearCart } = useCart();
   const supabase = createClient();
 
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [gpsLink, setGpsLink] = useState<string | null>(null);
+  const [saveProfileDefault, setSaveProfileDefault] = useState(true);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [locationSuccess, setLocationSuccess] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('UPI');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  // Check auth session & load customer profile if logged in
+  useEffect(() => {
+    if (!isOpen) return;
+
+    async function loadProfile() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session && session.user) {
+          setCurrentUser(session.user);
+
+          const { data: profile } = await supabase
+            .from('customer_profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+
+          if (profile) {
+            if (profile.full_name) setName(profile.full_name);
+            if (profile.phone) setPhone(profile.phone);
+            if (profile.default_address) setAddress(profile.default_address);
+            if (profile.gps_link) {
+              setGpsLink(profile.gps_link);
+              setLocationSuccess(true);
+            }
+          } else {
+            if (session.user.user_metadata?.full_name) {
+              setName(session.user.user_metadata.full_name);
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Error fetching profile in checkout:', err);
+      }
+    }
+
+    loadProfile();
+  }, [isOpen, supabase]);
 
   if (!isOpen) return null;
 
@@ -108,6 +149,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
       const newOrderPayload = {
         id: orderId,
+        user_id: currentUser ? currentUser.id : null,
         customer_name: name.trim(),
         customer_phone: cleanPhone,
         delivery_address: address.trim(),
@@ -122,8 +164,23 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         order_status: 'NEW' as const,
       };
 
+      // Save / update profile if user is logged in
+      if (currentUser && saveProfileDefault) {
+        try {
+          await supabase.from('customer_profiles').upsert({
+            id: currentUser.id,
+            full_name: name.trim(),
+            phone: cleanPhone,
+            default_address: address.trim(),
+            gps_link: gpsLink || null,
+            updated_at: new Date().toISOString(),
+          });
+        } catch (profErr) {
+          console.warn('Profile save note:', profErr);
+        }
+      }
+
       // Insert directly into Supabase orders table without .select()
-      // to avoid anon SELECT RLS policy violation
       const { error } = await supabase
         .from('orders')
         .insert([newOrderPayload]);
@@ -192,6 +249,17 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             <X className="w-4 h-4" />
           </button>
         </div>
+
+        {/* Logged in indicator */}
+        {currentUser && (
+          <div className="bg-emerald-950/40 border-b border-emerald-800/40 px-5 py-2 flex items-center justify-between text-xs text-emerald-400 font-semibold">
+            <div className="flex items-center gap-1.5">
+              <UserCheck className="w-4 h-4" />
+              <span>Ordering as {currentUser.email}</span>
+            </div>
+            <span className="text-[10px] text-stone-400 font-normal">Details auto-filled</span>
+          </div>
+        )}
 
         {/* Form Body */}
         <form onSubmit={handleSubmitOrder} className="p-5 space-y-5">
@@ -280,6 +348,19 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 )}
               </button>
             </div>
+
+            {/* Save profile checkbox if logged in */}
+            {currentUser && (
+              <label className="flex items-center gap-2 text-xs text-stone-300 cursor-pointer pt-1">
+                <input
+                  type="checkbox"
+                  checked={saveProfileDefault}
+                  onChange={(e) => setSaveProfileDefault(e.target.checked)}
+                  className="rounded border-stone-700 text-amber-500 focus:ring-amber-400 bg-stone-900"
+                />
+                <span>Save this address as my default for future orders</span>
+              </label>
+            )}
           </div>
 
           {/* Payment Method Selection */}

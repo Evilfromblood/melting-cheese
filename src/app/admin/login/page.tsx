@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import { Lock, Mail, ArrowRight, Loader2, ChefHat, ArrowLeft } from 'lucide-react';
+import { BrandLogo } from '@/components/ui/BrandLogo';
+import { Lock, Mail, ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -51,12 +52,10 @@ export default function AdminLoginPage() {
           <span>Back to Storefront</span>
         </Link>
 
-        {/* Branding */}
-        <div className="text-center space-y-2">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center mx-auto shadow-lg shadow-amber-500/20">
-            <ChefHat className="w-8 h-8 text-stone-950" />
-          </div>
-          <h1 className="text-2xl font-black text-white">Kitchen Admin Portal</h1>
+        {/* Branding with Custom Logo */}
+        <div className="text-center flex flex-col items-center space-y-2">
+          <BrandLogo size="lg" />
+          <h1 className="text-xl font-black text-white pt-1">Kitchen Admin Portal</h1>
           <p className="text-xs text-stone-400">
             Melting Cheese • 14, Sant Ravidas Nagar, Bhadohi
           </p>

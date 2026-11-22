@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="crust" x1="10" y1="15" x2="90" y2="25" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#b45309" />
+      <stop offset="50%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#92400e" />
+    </linearGradient>
+    <linearGradient id="cheese" x1="50" y1="20" x2="50" y2="95" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="35%" stop-color="#fde047" />
+      <stop offset="70%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+  <path d="M 12 24 C 36 12, 64 12, 88 24 L 54 90 C 52 94, 48 94, 46 90 Z" fill="url(#crust)" stroke="#78350f" stroke-width="3" />
+  <path d="M 16 26 C 38 18, 62 18, 84 26 L 77 44 C 74 46, 71 52, 72 58 C 73 63, 67 65, 64 61 C 61 57, 58 59, 57 66 C 56 75, 49 84, 50 86 C 49 88, 47 86, 46 80 C 44 72, 38 68, 36 74 C 34 79, 29 78, 30 71 C 31 63, 26 58, 25 50 Z" fill="url(#cheese)" />
+  <circle cx="38" cy="38" r="4.5" fill="#fef9c3" />
+  <circle cx="62" cy="36" r="4" fill="#fef9c3" />
+  <circle cx="48" cy="52" r="5" fill="#fef9c3" />
+  <circle cx="36" cy="58" r="3" fill="#fef9c3" />
+  <circle cx="50" cy="95" r="2" fill="#f59e0b" />
+</svg>

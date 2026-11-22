@@ -56,6 +56,7 @@ export type OrderStatus = 'NEW' | 'PREPARING' | 'OUT_FOR_DELIVERY' | 'DELIVERED'
 export interface Order {
   id: string;
   order_number: number;
+  user_id?: string | null;
   customer_name: string;
   customer_phone: string;
   delivery_address: string;
@@ -69,4 +70,13 @@ export interface Order {
   payment_status: PaymentStatus;
   order_status: OrderStatus;
   created_at: string;
+}
+
+export interface CustomerProfile {
+  id: string;
+  full_name?: string | null;
+  phone?: string | null;
+  default_address?: string | null;
+  gps_link?: string | null;
+  updated_at?: string;
 }

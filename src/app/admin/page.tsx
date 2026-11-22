@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { LiveOrdersTab } from '@/components/admin/LiveOrdersTab';
 import { StockToggleTab } from '@/components/admin/StockToggleTab';
-import { ChefHat, ShoppingBag, Layers, LogOut, ArrowLeft, Loader2 } from 'lucide-react';
+import { BrandLogo } from '@/components/ui/BrandLogo';
+import { ShoppingBag, Layers, LogOut, ArrowLeft, Loader2 } from 'lucide-react';
 import type { User } from '@supabase/supabase-js';
 
 export default function AdminDashboardPage() {
@@ -85,9 +86,7 @@ export default function AdminDashboardPage() {
             </Link>
 
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-amber-500 flex items-center justify-center shadow-lg shadow-amber-500/20">
-                <ChefHat className="w-5 h-5 text-stone-950" />
-              </div>
+              <BrandLogo size="sm" showText={false} />
               <div>
                 <h1 className="font-extrabold text-base sm:text-lg text-white leading-none">
                   Kitchen Dashboard

@@ -9,11 +9,13 @@ import { PizzaCustomizerSheet } from '@/components/storefront/PizzaCustomizerShe
 import { CartDrawer } from '@/components/storefront/CartDrawer';
 import { CheckoutModal } from '@/components/storefront/CheckoutModal';
 import { OrderSuccessModal } from '@/components/storefront/OrderSuccessModal';
+import { WhatsAppButton } from '@/components/storefront/WhatsAppButton';
+import { BrandLogo } from '@/components/ui/BrandLogo';
 import { FALLBACK_MENU_ITEMS } from '@/lib/menu-data';
 import { createClient } from '@/lib/supabase/client';
 import { MenuItem, Order } from '@/types';
 import { useCart } from '@/context/CartContext';
-import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, MessageCircle, MapPin, Phone } from 'lucide-react';
 
 const CATEGORIES = [
   'Pizza',
@@ -206,6 +208,9 @@ export default function StorefrontPage() {
         </div>
       )}
 
+      {/* Floating WhatsApp Business Support Button */}
+      <WhatsAppButton />
+
       {/* Sticky Bottom Floating Checkout Bar (Swiggy/Zomato style) */}
       {totalItemsCount > 0 && (
         <div className="fixed bottom-4 left-4 right-4 z-40 max-w-lg mx-auto animate-in slide-in-from-bottom-4 duration-200">
@@ -239,12 +244,29 @@ export default function StorefrontPage() {
       )}
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-stone-800/80 bg-stone-900/40 py-8 text-center text-xs text-stone-500 space-y-2">
-        <div className="font-extrabold text-stone-300 flex items-center justify-center gap-1.5">
-          <span>🧀 Melting Cheese - Bhadohi</span>
+      <footer className="mt-auto border-t border-stone-800/80 bg-stone-900/50 py-10 px-4 text-center text-xs text-stone-400 space-y-4">
+        <div className="flex justify-center">
+          <BrandLogo size="md" showText={true} />
         </div>
-        <p>14, Sant Ravidas Nagar, Bhadohi, Uttar Pradesh • Phone: +91 8090485140</p>
-        <p className="text-[11px] text-stone-400">Open Daily till 12:00 AM • Freshly Hand-Stretched Pizzas & Fast Food</p>
+        
+        <div className="max-w-md mx-auto space-y-1.5 text-stone-400">
+          <p className="flex items-center justify-center gap-1.5">
+            <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <span>14, Sant Ravidas Nagar, Bhadohi, Uttar Pradesh</span>
+          </p>
+          <p className="flex items-center justify-center gap-2">
+            <Phone className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <a href="tel:+918090485140" className="hover:text-white font-mono">+91 8090485140</a>
+            <span>•</span>
+            <span className="text-emerald-400 font-semibold flex items-center gap-1">
+              <MessageCircle className="w-3.5 h-3.5" />
+              <span>WhatsApp Business Verified</span>
+            </span>
+          </p>
+          <p className="text-[11px] text-stone-500 pt-1">
+            Open Daily till 12:00 AM • Freshly Hand-Stretched Pizzas, Burgers & Fast Food
+          </p>
+        </div>
       </footer>
 
       {/* Modals & Drawers */}

@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
-import { Plus, Minus, SlidersHorizontal, Flame, Sparkles, AlertCircle } from 'lucide-react';
+import { Plus, Minus, SlidersHorizontal, Flame, Sparkles } from 'lucide-react';
 import { MenuItem } from '@/types';
 import { useCart, MAX_ITEM_QTY } from '@/context/CartContext';
+import { FoodImage } from '@/components/ui/FoodImage';
 
 interface MenuItemCardProps {
   item: MenuItem;
@@ -54,18 +54,12 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, onCustomize })
       <div>
         {/* Top visual row: Dish Image & Badges */}
         <div className="relative w-full h-36 sm:h-44 rounded-2xl overflow-hidden mb-3 bg-stone-900 border border-stone-800/60">
-          {item.image ? (
-            <img
-              src={item.image}
-              alt={item.name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              loading="lazy"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-4xl bg-gradient-to-br from-stone-900 to-stone-800">
-              🧀
-            </div>
-          )}
+          <FoodImage
+            src={item.image}
+            alt={item.name}
+            category={item.category}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
 
           {/* Gradient Overlay for text contrast */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />

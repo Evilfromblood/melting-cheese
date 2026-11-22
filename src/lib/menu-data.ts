@@ -9,10 +9,10 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     dietary: 'veg',
     base_price: 289,
     customizable: true,
-    description: '8 inch crisp crust loaded with sweet golden corn, aromatic herbs, and melted mozzarella.',
+    description: '8 inch crisp crust loaded with golden sweet corn and rich melted mozzarella.',
     is_available: true,
     badge: 'bestseller',
-    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'pizza-2',
@@ -21,10 +21,10 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     dietary: 'veg',
     base_price: 309,
     customizable: true,
-    description: '8 inch pizza loaded with soft spiced cottage cheese cubes, crisp peppers, and cheese.',
+    description: '8 inch pizza loaded with spiced fresh cottage cheese cubes and golden cheese.',
     is_available: true,
     badge: 'bestseller',
-    image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'pizza-3',
@@ -33,10 +33,10 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     dietary: 'non-veg',
     base_price: 309,
     customizable: true,
-    description: '8 inch pizza loaded with seasoned tender chicken chunks, herb tomato sauce, and mozzarella.',
+    description: '8 inch pizza loaded with tender chicken chunks, herb tomato sauce, and mozzarella.',
     is_available: true,
     badge: 'bestseller',
-    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'pizza-4',
@@ -45,10 +45,10 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     dietary: 'veg',
     base_price: 319,
     customizable: true,
-    description: '8 inch pizza topped with creamy royal makhani gravy sauce and marinated paneer.',
+    description: '8 inch pizza with rich creamy makhani gravy base topped with marinated paneer.',
     is_available: true,
     badge: 'chef-special',
-    image: 'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'pizza-5',
@@ -57,10 +57,10 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     dietary: 'veg',
     base_price: 319,
     customizable: true,
-    description: '8 inch pizza infused with fiery tandoori spices, char-grilled paneer, onion, and peppers.',
+    description: '8 inch pizza infused with fiery tandoori spices, char-grilled paneer, and peppers.',
     is_available: true,
     badge: 'spicy',
-    image: 'https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'pizza-6',
@@ -69,10 +69,10 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     dietary: 'non-veg',
     base_price: 319,
     customizable: true,
-    description: '8 inch pizza loaded with smokey tandoori roasted chicken, onion, capsicum, and fresh herbs.',
+    description: '8 inch pizza with smokey tandoori roasted chicken, onion, capsicum, and herbs.',
     is_available: true,
     badge: 'spicy',
-    image: 'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'pizza-7',
@@ -81,10 +81,10 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     dietary: 'non-veg',
     base_price: 319,
     customizable: true,
-    description: '8 inch pizza layered with rich buttery tomato gravy and succulent shredded chicken.',
+    description: '8 inch pizza smothered in buttery tomato gravy and succulent shredded chicken.',
     is_available: true,
     badge: 'chef-special',
-    image: 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'pizza-8',
@@ -93,10 +93,10 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     dietary: 'non-veg',
     base_price: 319,
     customizable: true,
-    description: '8 inch pizza drizzled with smoky hickory BBQ sauce, grilled chicken, and caramelized onion.',
+    description: '8 inch pizza drizzled with smoky BBQ sauce, grilled chicken, and caramelized onion.',
     is_available: true,
     badge: 'bestseller',
-    image: 'https://images.unsplash.com/photo-1588315029754-2dd089d39a1a?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1588315029754-2dd089d39a1a?w=600&auto=format&fit=crop&q=80',
   },
 
   // Burgers
@@ -109,7 +109,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     customizable: false,
     description: 'Crispy golden vegetable patty nestled with fresh lettuce, onions, and signature house mayo.',
     is_available: true,
-    image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'burger-2',
@@ -121,7 +121,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     description: 'Crunchy spiced vegetable patty drenched in rich butter makhani sauce and crisp veggies.',
     is_available: true,
     badge: 'chef-special',
-    image: 'https://images.unsplash.com/photo-1520072959219-c595dc870360?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1520072959219-c595dc870360?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'burger-3',
@@ -132,7 +132,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     customizable: false,
     description: 'Tender grilled chicken fillet seasoned with aromatic herbs, crisp lettuce, and mayo.',
     is_available: true,
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'burger-4',
@@ -144,7 +144,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     description: 'Juicy grilled chicken patty coated in velvety butter chicken sauce inside a toasted bun.',
     is_available: true,
     badge: 'chef-special',
-    image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'burger-5',
@@ -156,7 +156,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     description: 'Flavour-packed grilled chicken breast patty steeped in roasted Indian tandoori spices.',
     is_available: true,
     badge: 'spicy',
-    image: 'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'burger-6',
@@ -167,7 +167,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     customizable: false,
     description: 'Smoky grilled chicken patty drenched in thick barbeque glaze, fresh onions, and cheese.',
     is_available: true,
-    image: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'burger-7',
@@ -179,7 +179,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     description: 'Double-layer smokey grilled chicken fillets, melted cheese slice, crisp greens, and special sauce.',
     is_available: true,
     badge: 'bestseller',
-    image: 'https://images.unsplash.com/photo-1582196016295-f8c8bd4b3e99?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1582196016295-f8c8bd4b3e99?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'burger-8',
@@ -191,7 +191,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     description: 'Ultra-crunchy fried chicken fillet seasoned to perfection with creamy sauce and pickles.',
     is_available: true,
     badge: 'bestseller',
-    image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?w=600&auto=format&fit=crop&q=80',
   },
 
   // Snacks (customizable)
@@ -204,7 +204,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     customizable: true,
     description: 'Golden crispy potato fries tossed in light sea salt. Classic & crunchy.',
     is_available: true,
-    image: 'https://images.unsplash.com/photo-1576107232684-1279f3908594?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1576107232684-1279f3908594?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'snack-2',
@@ -216,7 +216,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     description: 'Crispy French fries generously dusted with zesty, hot African peri-peri spice mix.',
     is_available: true,
     badge: 'spicy',
-    image: 'https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'snack-3',
@@ -228,7 +228,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     description: 'Crispy fries submerged in warm molten cheddar cheese and seasoned herb drizzle.',
     is_available: true,
     badge: 'bestseller',
-    image: 'https://images.unsplash.com/photo-1585109649139-366815a0d713?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1585109649139-366815a0d713?w=600&auto=format&fit=crop&q=80',
   },
 
   // Chicken Wings & Strips
@@ -242,7 +242,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     description: '5 pieces of succulent, crispy fried chicken wings tossed in chef special seasoning.',
     is_available: true,
     badge: 'bestseller',
-    image: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'strips-2',
@@ -254,7 +254,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     description: '5 pieces of tender, boneless crispy chicken strips served with tangy dipping sauce.',
     is_available: true,
     badge: 'chef-special',
-    image: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=600&auto=format&fit=crop&q=80',
   },
 
   // Mocktails (all ₹99, veg)
@@ -268,7 +268,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     description: 'Refreshing blend of blue curacao citrus syrup, lemon fizz, and chilled soda.',
     is_available: true,
     badge: 'bestseller',
-    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'mocktail-2',
@@ -279,7 +279,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     customizable: false,
     description: 'Tropical pineapple nectar with a punch of citrus and bubbly refreshing soda.',
     is_available: true,
-    image: 'https://images.unsplash.com/photo-1546171753-97d7676e4602?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1546171753-97d7676e4602?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'mocktail-3',
@@ -290,7 +290,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     customizable: false,
     description: 'Sweet and tangy crushed strawberry infusion over ice and sparkling soda.',
     is_available: true,
-    image: 'https://images.unsplash.com/photo-1556881286-fc6915169721?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1556881286-fc6915169721?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'mocktail-4',
@@ -301,7 +301,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     customizable: false,
     description: 'Revitalizing fresh garden mint muddled with lime juice and cold soda.',
     is_available: true,
-    image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'mocktail-5',
@@ -312,7 +312,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     customizable: false,
     description: 'Crisp green apple essence balanced with sweet-tart citrus notes and sparkling fizz.',
     is_available: true,
-    image: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'mocktail-6',
@@ -324,7 +324,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     description: 'Vibrant wild blueberry puree stirred with fresh lime and chilled sparkling water.',
     is_available: true,
     badge: 'chef-special',
-    image: 'https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'mocktail-7',
@@ -335,10 +335,10 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     customizable: false,
     description: 'Zesty sunshine orange citrus blend infused with lemon twists and soda.',
     is_available: true,
-    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?w=600&auto=format&fit=crop&q=80',
   },
   {
-    id: 'mocktail-8',
+    id: 'lemon-tea',
     name: 'Lemon Tea',
     category: 'Mocktails',
     dietary: 'veg',
@@ -346,6 +346,6 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     customizable: false,
     description: 'Chilled invigorating brewed black tea infused with fresh lemon and mint leaves.',
     is_available: true,
-    image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&auto=format&fit=crop&q=80',
   },
 ];
