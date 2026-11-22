@@ -19,14 +19,16 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, onCustomize })
   const totalQuantity = matchingCartItems.reduce((sum, ci) => sum + ci.quantity, 0);
 
   const isPizza = item.category === 'Pizza';
-  const isCustomizable = item.customizable || isPizza;
   const isItemAtMax = totalQuantity >= MAX_ITEM_QTY;
   const isAddDisabled = !item.is_available || isItemAtMax || isOrderCapReached;
 
   const handleAddClick = () => {
     if (isAddDisabled) return;
 
-    if (isCustomizable) {
+    if (matchingCartItems.length > 0) {
+      const target = matchingCartItems[matchingCartItems.length - 1];
+      updateQuantity(target.cartId, target.quantity + 1);
+    } else if (isPizza) {
       onCustomize(item);
     } else {
       addItem(item);
@@ -34,12 +36,9 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, onCustomize })
   };
 
   const handleMinusClick = () => {
-    if (matchingCartItems.length === 1 && !matchingCartItems[0].customization) {
-      updateQuantity(matchingCartItems[0].cartId, matchingCartItems[0].quantity - 1);
-    } else if (isCustomizable) {
-      onCustomize(item);
-    } else if (matchingCartItems.length > 0) {
-      updateQuantity(matchingCartItems[0].cartId, matchingCartItems[0].quantity - 1);
+    if (matchingCartItems.length > 0) {
+      const target = matchingCartItems[matchingCartItems.length - 1];
+      updateQuantity(target.cartId, target.quantity - 1);
     }
   };
 
@@ -101,13 +100,13 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, onCustomize })
             )}
           </div>
 
-          {/* Top Right: Status or Customizable */}
+          {/* Top Right: Status or Pizza Custom Badge */}
           <div className="absolute top-2.5 right-2.5 z-10">
             {!item.is_available ? (
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-950/90 text-rose-400 border border-rose-800 shadow-md">
                 SOLD OUT
               </span>
-            ) : isCustomizable ? (
+            ) : isPizza ? (
               <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-900/90 text-amber-400 border border-amber-500/30 backdrop-blur-md flex items-center gap-1 shadow-md">
                 <SlidersHorizontal className="w-2.5 h-2.5" />
                 <span>Custom</span>
@@ -135,7 +134,7 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, onCustomize })
 
       {/* Action Stepper Row */}
       <div className="pt-2 border-t border-stone-800/60 flex items-center justify-between gap-2">
-        {/* Quantity Warning Tooltip */}
+        {/* Quantity Warning Tooltip or Category Note */}
         <div>
           {isItemAtMax ? (
             <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
@@ -147,37 +146,53 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, onCustomize })
             </span>
           ) : (
             <span className="text-[11px] text-stone-500 font-medium">
-              {isCustomizable ? 'Choice of crust & extra cheese' : 'Freshly prepared'}
+              {isPizza
+                ? 'Choice of crust & extra cheese'
+                : item.category === 'Burgers'
+                ? 'Grilled fresh to order'
+                : item.category === 'Mocktails'
+                ? 'Chilled & refreshing'
+                : 'Freshly prepared'}
             </span>
           )}
         </div>
 
         {/* Interactive Add / Stepper */}
-        {totalQuantity > 0 && !isCustomizable ? (
-          <div className="flex items-center gap-1.5 bg-amber-500/15 border border-amber-500/40 rounded-xl p-1 shadow-sm">
-            <button
-              onClick={handleMinusClick}
-              className="w-7 h-7 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-200 flex items-center justify-center transition-colors active:scale-95"
-              aria-label="Decrease quantity"
-            >
-              <Minus className="w-3.5 h-3.5" />
-            </button>
-            <span className="text-xs font-black text-amber-400 px-1 min-w-[18px] text-center">
-              {totalQuantity}
-            </span>
-            <button
-              onClick={handleAddClick}
-              disabled={isItemAtMax || isOrderCapReached}
-              className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors active:scale-95 ${
-                isItemAtMax || isOrderCapReached
-                  ? 'bg-stone-800 text-stone-600 cursor-not-allowed'
-                  : 'bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold'
-              }`}
-              title={isItemAtMax ? 'Maximum limit of 15 reached' : 'Increase quantity'}
-              aria-label="Increase quantity"
-            >
-              <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
-            </button>
+        {totalQuantity > 0 ? (
+          <div className="flex flex-col items-end gap-1">
+            <div className="flex items-center gap-1.5 bg-amber-500/15 border border-amber-500/40 rounded-xl p-1 shadow-sm">
+              <button
+                onClick={handleMinusClick}
+                className="w-7 h-7 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-200 flex items-center justify-center transition-colors active:scale-95"
+                aria-label="Decrease quantity"
+              >
+                <Minus className="w-3.5 h-3.5" />
+              </button>
+              <span className="text-xs font-black text-amber-400 px-1 min-w-[20px] text-center">
+                {totalQuantity}
+              </span>
+              <button
+                onClick={handleAddClick}
+                disabled={isItemAtMax || isOrderCapReached}
+                className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors active:scale-95 ${
+                  isItemAtMax || isOrderCapReached
+                    ? 'bg-stone-800 text-stone-600 cursor-not-allowed'
+                    : 'bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold'
+                }`}
+                title={isItemAtMax ? 'Maximum limit of 15 reached' : 'Increase quantity'}
+                aria-label="Increase quantity"
+              >
+                <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+              </button>
+            </div>
+            {isPizza && (
+              <button
+                onClick={() => onCustomize(item)}
+                className="text-[10px] text-amber-400/80 hover:text-amber-300 underline font-medium"
+              >
+                + Customise
+              </button>
+            )}
           </div>
         ) : (
           <button
@@ -191,11 +206,6 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, onCustomize })
           >
             <Plus className="w-3.5 h-3.5 stroke-[3]" />
             <span>ADD</span>
-            {totalQuantity > 0 && isCustomizable && (
-              <span className="ml-1 px-1.5 py-0.2 bg-stone-950 text-amber-400 rounded-full text-[10px] font-black">
-                {totalQuantity}
-              </span>
-            )}
           </button>
         )}
       </div>

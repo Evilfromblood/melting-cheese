@@ -35,7 +35,7 @@ export const CategoryBar: React.FC<CategoryBarProps> = ({
 }) => {
   return (
     <div className="sticky top-[108px] z-20 bg-[#121214]/95 backdrop-blur-md pt-3 pb-2.5 border-b border-stone-800/80 shadow-md">
-      <div className="max-w-4xl mx-auto px-4 space-y-2.5">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-2.5">
         {/* Search & Veg Filter Row */}
         <div className="flex items-center gap-2.5">
           {/* Search Box */}

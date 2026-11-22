@@ -168,9 +168,9 @@ export default function StorefrontPage() {
       />
 
       {/* Main Menu Grid */}
-      <main className="max-w-4xl mx-auto px-4 py-5 w-full flex-1">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-1">
         {filteredItems.length === 0 ? (
-          <div className="text-center py-16 space-y-3 bg-[#18181b]/50 border border-stone-800 rounded-3xl p-8">
+          <div className="text-center py-16 space-y-3 bg-[#18181b]/50 border border-stone-800 rounded-3xl p-8 max-w-xl mx-auto">
             <div className="text-4xl">🔍</div>
             <h3 className="font-bold text-base text-stone-200">No matching dishes found</h3>
             <p className="text-xs text-stone-400">
@@ -188,7 +188,7 @@ export default function StorefrontPage() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
             {filteredItems.map((item) => (
               <MenuItemCard
                 key={item.id}

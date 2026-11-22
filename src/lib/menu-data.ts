@@ -175,11 +175,11 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     category: 'Burgers',
     dietary: 'non-veg',
     base_price: 249,
-    customizable: true,
+    customizable: false,
     description: 'Double-layer smokey grilled chicken fillets, melted cheese slice, crisp greens, and special sauce.',
     is_available: true,
     badge: 'bestseller',
-    image: 'https://images.unsplash.com/photo-1582196016295-f8c8bd4b3e99?w=600&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'burger-8',
@@ -194,17 +194,17 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?w=600&auto=format&fit=crop&q=80',
   },
 
-  // Snacks (customizable)
+  // Snacks
   {
     id: 'snack-1',
     name: 'Salted Fries',
     category: 'Snacks',
     dietary: 'veg',
     base_price: 119,
-    customizable: true,
+    customizable: false,
     description: 'Golden crispy potato fries tossed in light sea salt. Classic & crunchy.',
     is_available: true,
-    image: 'https://images.unsplash.com/photo-1576107232684-1279f3908594?w=600&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'snack-2',
@@ -212,7 +212,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     category: 'Snacks',
     dietary: 'veg',
     base_price: 149,
-    customizable: true,
+    customizable: false,
     description: 'Crispy French fries generously dusted with zesty, hot African peri-peri spice mix.',
     is_available: true,
     badge: 'spicy',
@@ -224,7 +224,7 @@ export const FALLBACK_MENU_ITEMS: MenuItem[] = [
     category: 'Snacks',
     dietary: 'veg',
     base_price: 199,
-    customizable: true,
+    customizable: false,
     description: 'Crispy fries submerged in warm molten cheddar cheese and seasoned herb drizzle.',
     is_available: true,
     badge: 'bestseller',

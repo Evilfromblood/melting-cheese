@@ -266,15 +266,31 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onCheckout }) => {
 
                       {/* Quantity Controls & Total */}
                       <div className="flex flex-col items-end gap-1.5">
-                        <div className="text-sm font-black text-stone-100">
-                          ₹{cartItem.totalPrice}
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-black text-stone-100">
+                            ₹{cartItem.totalPrice}
+                          </span>
+                          <button
+                            onClick={() => removeItem(cartItem.cartId)}
+                            className="text-stone-500 hover:text-rose-400 p-0.5 rounded transition-colors"
+                            title="Remove from cart"
+                            aria-label="Remove item from cart"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
                         </div>
                         <div className="flex items-center gap-1.5 bg-stone-800 border border-stone-700/60 rounded-xl px-1.5 py-0.5">
                           <button
                             onClick={() => updateQuantity(cartItem.cartId, cartItem.quantity - 1)}
-                            className="w-5 h-5 rounded hover:bg-stone-700 flex items-center justify-center text-stone-300 active:scale-95 transition-transform"
+                            className="w-5 h-5 rounded hover:bg-stone-700 flex items-center justify-center text-stone-300 hover:text-rose-400 active:scale-95 transition-transform"
+                            title={cartItem.quantity === 1 ? 'Remove item' : 'Decrease quantity'}
+                            aria-label="Decrease quantity"
                           >
-                            <Minus className="w-3 h-3" />
+                            {cartItem.quantity === 1 ? (
+                              <Trash2 className="w-3 h-3 text-stone-400 hover:text-rose-400" />
+                            ) : (
+                              <Minus className="w-3 h-3" />
+                            )}
                           </button>
                           <span className="text-xs font-black text-amber-400 px-1">
                             {cartItem.quantity}
@@ -288,6 +304,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onCheckout }) => {
                                 : 'text-stone-600 cursor-not-allowed'
                             }`}
                             title={isItemAtMax ? 'Item limit 15 reached' : 'Increase quantity'}
+                            aria-label="Increase quantity"
                           >
                             <Plus className="w-3 h-3" />
                           </button>

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Phone, MessageCircle, ShoppingBag, Clock, MapPin, Shield, User, CheckCircle2 } from 'lucide-react';
+import { Phone, MessageCircle, ShoppingBag, Clock, MapPin, User, CheckCircle2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { BrandLogo } from '@/components/ui/BrandLogo';
 import { createClient } from '@/lib/supabase/client';
@@ -42,7 +42,7 @@ export const Header: React.FC = () => {
         </span>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
         {/* Custom Brand Logo */}
         <div className="flex flex-col">
           <Link href="/" className="group">
@@ -113,15 +113,6 @@ export const Header: React.FC = () => {
           >
             <MessageCircle className="w-4 h-4 text-emerald-400" />
           </a>
-
-          {/* Admin Dashboard */}
-          <Link
-            href="/admin"
-            className="w-9 h-9 rounded-2xl bg-stone-900 border border-stone-800 hover:border-amber-500/50 flex items-center justify-center text-stone-400 hover:text-amber-400 transition-all shadow-sm active:scale-95"
-            title="Kitchen Dashboard"
-          >
-            <Shield className="w-4 h-4" />
-          </Link>
 
           {/* Cart Floating Button */}
           <button

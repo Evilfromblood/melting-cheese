@@ -190,13 +190,13 @@ VALUES
     ('Butter Chicken Grill', 'Burgers', 'non-veg', 179, false, 'Juicy grilled chicken patty coated in velvety butter chicken sauce inside a toasted bun.', true, 'chef-special', 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&auto=format&fit=crop&q=80'),
     ('Tandoori Grill Chicken', 'Burgers', 'non-veg', 179, false, 'Flavour-packed grilled chicken breast patty steeped in roasted Indian tandoori spices.', true, 'spicy', 'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=600&auto=format&fit=crop&q=80'),
     ('Bbq chicken grill', 'Burgers', 'non-veg', 179, false, 'Smoky grilled chicken patty drenched in thick barbeque glaze, fresh onions, and cheese.', true, NULL, 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600&auto=format&fit=crop&q=80'),
-    ('Big Smokey Grill Chicken Burger', 'Burgers', 'non-veg', 249, true, 'Double-layer smokey grilled chicken fillets, melted cheese slice, crisp greens, and special sauce.', true, 'bestseller', 'https://images.unsplash.com/photo-1582196016295-f8c8bd4b3e99?w=600&auto=format&fit=crop&q=80'),
+    ('Big Smokey Grill Chicken Burger', 'Burgers', 'non-veg', 249, false, 'Double-layer smokey grilled chicken fillets, melted cheese slice, crisp greens, and special sauce.', true, 'bestseller', 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&auto=format&fit=crop&q=80'),
     ('Crispy Chicken Burger', 'Burgers', 'non-veg', 249, false, 'Ultra-crunchy fried chicken fillet seasoned to perfection with creamy sauce and pickles.', true, 'bestseller', 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?w=600&auto=format&fit=crop&q=80'),
 
-    -- Snacks (customizable)
-    ('Salted Fries', 'Snacks', 'veg', 119, true, 'Golden crispy potato fries tossed in light sea salt. Classic & crunchy.', true, NULL, 'https://images.unsplash.com/photo-1576107232684-1279f3908594?w=600&auto=format&fit=crop&q=80'),
-    ('Peri Peri Fries', 'Snacks', 'veg', 149, true, 'Crispy French fries generously dusted with zesty, hot African peri-peri spice mix.', true, 'spicy', 'https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=600&auto=format&fit=crop&q=80'),
-    ('Saucy Cheesy Fries', 'Snacks', 'veg', 199, true, 'Crispy fries submerged in warm molten cheddar cheese and seasoned herb drizzle.', true, 'bestseller', 'https://images.unsplash.com/photo-1585109649139-366815a0d713?w=600&auto=format&fit=crop&q=80'),
+    -- Snacks
+    ('Salted Fries', 'Snacks', 'veg', 119, false, 'Golden crispy potato fries tossed in light sea salt. Classic & crunchy.', true, NULL, 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&auto=format&fit=crop&q=80'),
+    ('Peri Peri Fries', 'Snacks', 'veg', 149, false, 'Crispy French fries generously dusted with zesty, hot African peri-peri spice mix.', true, 'spicy', 'https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=600&auto=format&fit=crop&q=80'),
+    ('Saucy Cheesy Fries', 'Snacks', 'veg', 199, false, 'Crispy fries submerged in warm molten cheddar cheese and seasoned herb drizzle.', true, 'bestseller', 'https://images.unsplash.com/photo-1585109649139-366815a0d713?w=600&auto=format&fit=crop&q=80'),
 
     -- Chicken Wings & Strips
     ('Signature Chicken Wings - 5 Pcs', 'Chicken Wings & Strips', 'non-veg', 299, false, '5 pieces of succulent, crispy fried chicken wings tossed in chef special seasoning.', true, 'bestseller', 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=600&auto=format&fit=crop&q=80'),
