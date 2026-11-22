@@ -126,6 +126,12 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       return;
     }
 
+    const outOfStockItem = items.find((ci) => ci.item.is_available === false);
+    if (outOfStockItem) {
+      setErrorMessage(`"${outOfStockItem.item.name}" is currently sold out. Please remove it from your cart before placing your order.`);
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {

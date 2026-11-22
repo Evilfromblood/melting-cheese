@@ -17,6 +17,9 @@ interface CartContextType {
   applyPromo: (code: string) => { success: boolean; message: string };
   removePromo: () => void;
   subtotal: number;
+  inStockSubtotal: number;
+  hasOutOfStockItems: boolean;
+  syncMenuAvailability: (menu: MenuItem[]) => void;
   discount: number;
   freeItem: string | null;
   total: number;
@@ -91,6 +94,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isOrderCapReached = totalItemsCount >= MAX_ORDER_ITEMS;
 
   const addItem = (item: MenuItem, customization?: PizzaCustomization): { success: boolean; message?: string } => {
+    // Out-of-stock cart protection
+    if (item.is_available === false) {
+      showToast(`${item.name} is currently out of stock`);
+      return { success: false, message: `${item.name} is currently out of stock` };
+    }
+
     let unitPrice = item.base_price;
     let cartId = item.id;
 
@@ -163,6 +172,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const targetItem = items.find((i) => i.cartId === cartId);
     if (!targetItem) return { success: false };
 
+    // Prevent increasing quantity of out-of-stock items
+    if (targetItem.item.is_available === false && quantity > targetItem.quantity) {
+      showToast(`${targetItem.item.name} is currently out of stock`);
+      return { success: false, message: `${targetItem.item.name} is currently out of stock` };
+    }
+
     const diff = quantity - targetItem.quantity;
     if (diff > 0 && totalItemsCount + diff > MAX_ORDER_ITEMS) {
       showToast(`Order limit of ${MAX_ORDER_ITEMS} items reached!`);
@@ -214,10 +229,34 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const subtotal = items.reduce((sum, item) => sum + item.totalPrice, 0);
+  const inStockSubtotal = items
+    .filter((ci) => ci.item.is_available !== false)
+    .reduce((sum, item) => sum + item.totalPrice, 0);
+  const hasOutOfStockItems = items.some((ci) => ci.item.is_available === false);
 
-  // Promo Calculation
-  const promoUnlocked = isPromoApplied && subtotal >= PROMO_THRESHOLD;
-  const promoTargetRemaining = isPromoApplied ? Math.max(0, PROMO_THRESHOLD - subtotal) : 0;
+  const syncMenuAvailability = (menu: MenuItem[]) => {
+    setItems((prev) =>
+      prev.map((cartItem) => {
+        const menuItem = menu.find(
+          (m) => m.id === cartItem.item.id || m.name.toLowerCase() === cartItem.item.name.toLowerCase()
+        );
+        if (menuItem && typeof menuItem.is_available === 'boolean' && menuItem.is_available !== cartItem.item.is_available) {
+          return {
+            ...cartItem,
+            item: {
+              ...cartItem.item,
+              is_available: menuItem.is_available,
+            },
+          };
+        }
+        return cartItem;
+      })
+    );
+  };
+
+  // Promo Calculation based on in-stock items
+  const promoUnlocked = isPromoApplied && inStockSubtotal >= PROMO_THRESHOLD;
+  const promoTargetRemaining = isPromoApplied ? Math.max(0, PROMO_THRESHOLD - inStockSubtotal) : 0;
   const discount = promoUnlocked ? PROMO_DISCOUNT : 0;
   const freeItem = promoUnlocked ? PROMO_FREE_ITEM : null;
   const total = Math.max(0, subtotal - discount);
@@ -235,6 +274,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         applyPromo,
         removePromo,
         subtotal,
+        inStockSubtotal,
+        hasOutOfStockItems,
+        syncMenuAvailability,
         discount,
         freeItem,
         total,

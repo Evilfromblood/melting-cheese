@@ -22,6 +22,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onCheckout }) => {
     applyPromo,
     removePromo,
     subtotal,
+    inStockSubtotal,
+    hasOutOfStockItems,
     discount,
     freeItem,
     total,
@@ -33,7 +35,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onCheckout }) => {
 
   if (!isCartOpen) return null;
 
-  const progressPercentage = Math.min(100, Math.round((subtotal / 299) * 100));
+  const progressPercentage = Math.min(100, Math.round((inStockSubtotal / 299) * 100));
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
@@ -81,6 +83,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onCheckout }) => {
             <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-2 text-[11px] font-bold text-amber-400 flex items-center gap-2">
               <AlertCircle className="w-3.5 h-3.5 shrink-0" />
               <span>Maximum order capacity reached ({MAX_ORDER_ITEMS} items cap).</span>
+            </div>
+          )}
+
+          {/* Out of Stock Notice */}
+          {hasOutOfStockItems && (
+            <div className="bg-rose-950/70 border-b border-rose-800/80 px-4 py-2.5 text-xs font-bold text-rose-300 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+              <span>Some items in your cart are sold out. Please remove them to proceed.</span>
             </div>
           )}
 
@@ -133,7 +143,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onCheckout }) => {
                         <span>DIRECT50 active!</span>
                       </div>
                       <span className="font-mono font-bold text-amber-400 text-[11px]">
-                        ₹{subtotal} / ₹299
+                        ₹{inStockSubtotal} / ₹299
                       </span>
                     </div>
 
@@ -202,11 +212,15 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onCheckout }) => {
                           <span className="text-xs text-stone-400">
                             ₹{cartItem.unitPrice} each
                           </span>
-                          {isItemAtMax && (
+                          {cartItem.item.is_available === false ? (
+                            <span className="text-[10px] font-black text-rose-400 bg-rose-500/20 px-1.5 py-0.5 rounded border border-rose-500/30">
+                              SOLD OUT
+                            </span>
+                          ) : isItemAtMax ? (
                             <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-1.5 py-0.2 rounded border border-amber-500/20">
                               Max 15 limit
                             </span>
-                          )}
+                          ) : null}
                         </div>
                       </div>
 
@@ -243,13 +257,19 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onCheckout }) => {
                           </span>
                           <button
                             onClick={() => updateQuantity(cartItem.cartId, cartItem.quantity + 1)}
-                            disabled={!canIncrement}
+                            disabled={!canIncrement || cartItem.item.is_available === false}
                             className={`w-5 h-5 rounded flex items-center justify-center transition-transform active:scale-95 ${
-                              canIncrement
+                              canIncrement && cartItem.item.is_available !== false
                                 ? 'hover:bg-stone-700 text-stone-300'
                                 : 'text-stone-600 cursor-not-allowed'
                             }`}
-                            title={isItemAtMax ? 'Item limit 15 reached' : 'Increase quantity'}
+                            title={
+                              cartItem.item.is_available === false
+                                ? 'Item is out of stock'
+                                : isItemAtMax
+                                ? 'Item limit 15 reached'
+                                : 'Increase quantity'
+                            }
                             aria-label="Increase quantity"
                           >
                             <Plus className="w-3 h-3" />
@@ -310,14 +330,26 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onCheckout }) => {
               </div>
 
               <button
+                disabled={hasOutOfStockItems}
                 onClick={() => {
+                  if (hasOutOfStockItems) return;
                   setIsCartOpen(false);
                   onCheckout();
                 }}
-                className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-sm tracking-wide shadow-lg shadow-amber-500/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+                className={`w-full py-3.5 px-4 rounded-2xl font-black text-sm tracking-wide shadow-lg flex items-center justify-center gap-2 transition-all ${
+                  hasOutOfStockItems
+                    ? 'bg-stone-800 text-stone-500 cursor-not-allowed border border-stone-700/60 shadow-none'
+                    : 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 shadow-amber-500/20 active:scale-95'
+                }`}
               >
-                <span>Proceed to Checkout</span>
-                <ArrowRight className="w-4 h-4" />
+                {hasOutOfStockItems ? (
+                  <span>Remove Sold Out Items to Checkout</span>
+                ) : (
+                  <>
+                    <span>Proceed to Checkout</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           )}

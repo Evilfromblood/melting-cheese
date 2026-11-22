@@ -40,13 +40,31 @@ function PromoUrlListener() {
 }
 
 export default function StorefrontPage() {
-  const { totalItemsCount, total, subtotal, promoUnlocked, promoTargetRemaining, setIsCartOpen, toastMessage } = useCart();
+  const {
+    totalItemsCount,
+    total,
+    subtotal,
+    inStockSubtotal,
+    hasOutOfStockItems,
+    promoUnlocked,
+    promoTargetRemaining,
+    setIsCartOpen,
+    toastMessage,
+    syncMenuAvailability,
+  } = useCart();
   const supabase = createClient();
 
   const [menuItems, setMenuItems] = useState<MenuItem[]>(FALLBACK_MENU_ITEMS);
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isVegOnly, setIsVegOnly] = useState<boolean>(false);
+
+  // Sync cart item availability whenever menu items update
+  useEffect(() => {
+    if (menuItems.length > 0) {
+      syncMenuAvailability(menuItems);
+    }
+  }, [menuItems, syncMenuAvailability]);
 
   // Modals state
   const [customizingItem, setCustomizingItem] = useState<MenuItem | null>(null);
@@ -123,27 +141,29 @@ export default function StorefrontPage() {
     return counts;
   }, [menuItems, isVegOnly]);
 
-  // Filtered menu items
+  // Filtered menu items (In-stock items always sorted to the top)
   const filteredItems = useMemo(() => {
-    return menuItems.filter((item) => {
-      // Category filter
-      if (activeCategory !== 'All' && item.category !== activeCategory) {
-        return false;
-      }
-      // Veg filter
-      if (isVegOnly && item.dietary !== 'veg') {
-        return false;
-      }
-      // Search filter
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        const matchName = item.name.toLowerCase().includes(q);
-        const matchCat = item.category.toLowerCase().includes(q);
-        const matchDesc = item.description.toLowerCase().includes(q);
-        if (!matchName && !matchCat && !matchDesc) return false;
-      }
-      return true;
-    });
+    return menuItems
+      .filter((item) => {
+        // Category filter
+        if (activeCategory !== 'All' && item.category !== activeCategory) {
+          return false;
+        }
+        // Veg filter
+        if (isVegOnly && item.dietary !== 'veg') {
+          return false;
+        }
+        // Search filter
+        if (searchQuery.trim()) {
+          const q = searchQuery.toLowerCase();
+          const matchName = item.name.toLowerCase().includes(q);
+          const matchCat = item.category.toLowerCase().includes(q);
+          const matchDesc = item.description.toLowerCase().includes(q);
+          if (!matchName && !matchCat && !matchDesc) return false;
+        }
+        return true;
+      })
+      .sort((a, b) => Number(b.is_available !== false) - Number(a.is_available !== false));
   }, [menuItems, activeCategory, isVegOnly, searchQuery]);
 
   return (
@@ -218,12 +238,19 @@ export default function StorefrontPage() {
           <div
             onClick={() => setIsCartOpen(true)}
             className={`px-3.5 py-1.5 rounded-xl text-[11px] font-bold flex items-center justify-between shadow-lg backdrop-blur-md border cursor-pointer active:scale-[0.99] transition-all ${
-              promoUnlocked
+              hasOutOfStockItems
+                ? 'bg-rose-950/95 text-rose-300 border-rose-500/50'
+                : promoUnlocked
                 ? 'bg-emerald-950/95 text-emerald-300 border-emerald-500/50'
                 : 'bg-[#18181b]/95 text-amber-300 border-amber-500/35'
             }`}
           >
-            {promoUnlocked ? (
+            {hasOutOfStockItems ? (
+              <span className="flex items-center gap-1.5 text-rose-300 font-bold truncate">
+                <span>⚠️</span>
+                <span>Sold out item in cart — tap to remove</span>
+              </span>
+            ) : promoUnlocked ? (
               <span className="flex items-center gap-1.5 truncate">
                 <span>🎉</span>
                 <span>DIRECT50 Unlocked: You saved ₹50 + FREE Fries added!</span>
@@ -235,7 +262,7 @@ export default function StorefrontPage() {
               </span>
             )}
             <span className="text-[10px] font-mono font-black text-amber-400 shrink-0 ml-1.5">
-              ₹{subtotal}/₹299
+              ₹{inStockSubtotal}/₹299
             </span>
           </div>
 
