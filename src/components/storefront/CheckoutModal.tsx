@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { X, Navigation, Smartphone, Banknote, QrCode, ArrowRight, Loader2, Check, AlertTriangle, UserCheck } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useCart } from '@/context/CartContext';
-import { generateUpiLink } from '@/lib/upi';
 import { formatWhatsAppOrderMessage } from '@/lib/whatsapp';
 import { createClient } from '@/lib/supabase/client';
 import { Order, OrderItemSummary, PaymentMethod } from '@/types';
@@ -74,13 +73,13 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     loadProfile();
   }, [isOpen, supabase]);
 
-  if (!isOpen) return null;
+  // Generate static UPI deep link & QR payload memoized strictly on cart total
+  const upiDeepLink = useMemo(() => {
+    const upiId = process.env.NEXT_PUBLIC_UPI_ID || 'rhythm8@slc';
+    return `upi://pay?pa=${upiId}&pn=Melting%20Cheese&am=${total.toFixed(2)}&cu=INR&tn=Melting%20Cheese%20Order`;
+  }, [total]);
 
-  // Generate UPI deep link & QR payload
-  const upiDeepLink = generateUpiLink({
-    amount: total,
-    note: `Melting Cheese ${name ? `for ${name}` : 'Order'}`,
-  });
+  if (!isOpen) return null;
 
   const handleGetLocation = () => {
     if (!navigator.geolocation) {
