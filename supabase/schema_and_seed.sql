@@ -142,7 +142,38 @@ CREATE POLICY "Authenticated admins can manage orders"
     USING (true)
     WITH CHECK (true);
 
--- 9. Enable Supabase Realtime for orders, menu_items, and customer_profiles
+-- 9. Sequences Permission
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;
+
+-- 10. Store Settings Table
+CREATE TABLE IF NOT EXISTS public.store_settings (
+  id INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+  is_open BOOLEAN NOT NULL DEFAULT TRUE,
+  closed_message TEXT NOT NULL DEFAULT 'Kitchen is currently closed. Opens at 11:00 AM!',
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+INSERT INTO public.store_settings (id, is_open)
+VALUES (1, TRUE)
+ON CONFLICT (id) DO NOTHING;
+
+ALTER TABLE public.store_settings ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Public read store_settings" ON public.store_settings;
+CREATE POLICY "Public read store_settings"
+ON public.store_settings FOR SELECT
+USING (TRUE);
+
+DROP POLICY IF EXISTS "Authenticated update store_settings" ON public.store_settings;
+CREATE POLICY "Authenticated update store_settings"
+ON public.store_settings FOR ALL
+USING (auth.role() = 'authenticated')
+WITH CHECK (auth.role() = 'authenticated');
+
+GRANT SELECT ON TABLE public.store_settings TO anon, authenticated;
+GRANT ALL ON TABLE public.store_settings TO authenticated;
+
+-- 11. Enable Supabase Realtime for orders, menu_items, customer_profiles, and store_settings
 DO $$
 BEGIN
     IF NOT EXISTS (
@@ -165,12 +196,82 @@ BEGIN
     ) THEN
         ALTER PUBLICATION supabase_realtime ADD TABLE customer_profiles;
     END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_publication_tables 
+        WHERE pubname = 'supabase_realtime' AND tablename = 'store_settings'
+    ) THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE public.store_settings;
+    END IF;
 EXCEPTION
     WHEN OTHERS THEN
         RAISE NOTICE 'Realtime publication setup note: %', SQLERRM;
 END $$;
 
--- 10. Seed 29 Menu Items (Idempotent upsert by name with dish-specific photos)
+-- 12. Server-side Order Total and Stock Validation Trigger
+CREATE OR REPLACE FUNCTION public.validate_order_totals()
+RETURNS TRIGGER AS $$
+DECLARE
+  item JSONB;
+  db_price NUMERIC;
+  db_available BOOLEAN;
+  calc_subtotal NUMERIC := 0;
+  item_qty INTEGER;
+  addon_total NUMERIC;
+BEGIN
+  IF NEW.items IS NULL OR jsonb_array_length(NEW.items) = 0 THEN
+    RAISE EXCEPTION 'Order must contain at least one item';
+  END IF;
+
+  FOR item IN SELECT * FROM jsonb_array_elements(NEW.items)
+  LOOP
+    item_qty := GREATEST(COALESCE((item->>'quantity')::INTEGER, 1), 1);
+    addon_total := COALESCE((item->>'addonPrice')::NUMERIC, 0);
+
+    db_price := NULL;
+    db_available := NULL;
+
+    -- Safely match by UUID if valid, or fallback to matching by item name
+    IF (item->>'id') ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' THEN
+      SELECT base_price, is_available INTO db_price, db_available
+      FROM public.menu_items
+      WHERE id = (item->>'id')::UUID;
+    END IF;
+
+    IF db_price IS NULL THEN
+      SELECT base_price, is_available INTO db_price, db_available
+      FROM public.menu_items
+      WHERE LOWER(name) = LOWER(item->>'name')
+      LIMIT 1;
+    END IF;
+
+    IF db_available IS FALSE THEN
+      RAISE EXCEPTION 'Item "%" is currently out of stock', COALESCE(item->>'name', 'Unknown');
+    END IF;
+
+    IF db_price IS NOT NULL THEN
+      calc_subtotal := calc_subtotal + ((db_price + addon_total) * item_qty);
+    ELSE
+      calc_subtotal := calc_subtotal + (COALESCE((item->>'unitPrice')::NUMERIC, 0) * item_qty);
+    END IF;
+  END LOOP;
+
+  NEW.subtotal := calc_subtotal;
+  IF COALESCE(NEW.discount, 0) > 50 THEN
+    NEW.discount := 50;
+  END IF;
+  NEW.total := GREATEST(calc_subtotal - COALESCE(NEW.discount, 0), 0);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS trg_validate_order_totals ON public.orders;
+CREATE TRIGGER trg_validate_order_totals
+BEFORE INSERT ON public.orders
+FOR EACH ROW
+EXECUTE FUNCTION public.validate_order_totals();
+
+-- 13. Seed 29 Menu Items (Idempotent upsert by name with dish-specific photos)
 INSERT INTO menu_items (name, category, dietary, base_price, customizable, description, is_available, badge, image)
 VALUES
     -- Pizza (8 inches, customizable)

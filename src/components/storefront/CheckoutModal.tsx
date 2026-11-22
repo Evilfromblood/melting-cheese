@@ -129,20 +129,28 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     setIsSubmitting(true);
 
     try {
-      const orderItems: OrderItemSummary[] = items.map((ci) => ({
-        name: ci.item.name,
-        category: ci.item.category,
-        dietary: ci.item.dietary,
-        quantity: ci.quantity,
-        unitPrice: ci.unitPrice,
-        totalPrice: ci.totalPrice,
-        customization: ci.customization
-          ? {
-              crust: ci.customization.crust,
-              extraCheese: ci.customization.extraCheese,
-            }
-          : undefined,
-      }));
+      const orderItems: OrderItemSummary[] = items.map((ci) => {
+        const addonPrice =
+          (ci.customization?.crust === 'Cheese Burst' ? 120 : 0) +
+          (ci.customization?.extraCheese ? 40 : 0);
+
+        return {
+          id: ci.item.id,
+          name: ci.item.name,
+          category: ci.item.category,
+          dietary: ci.item.dietary,
+          quantity: ci.quantity,
+          unitPrice: ci.unitPrice,
+          totalPrice: ci.totalPrice,
+          addonPrice,
+          customization: ci.customization
+            ? {
+                crust: ci.customization.crust,
+                extraCheese: ci.customization.extraCheese,
+              }
+            : undefined,
+        };
+      });
 
       // Generate client UUID for idempotent direct insert without chaining .select()
       const orderId = crypto.randomUUID();

@@ -37,16 +37,25 @@ export interface CartItem {
 }
 
 export interface OrderItemSummary {
+  id?: string;
   name: string;
   category: string;
   dietary: DietaryType;
   quantity: number;
   unitPrice: number;
   totalPrice: number;
+  addonPrice?: number;
   customization?: {
     crust?: string;
     extraCheese?: boolean;
   };
+}
+
+export interface StoreSettings {
+  id: number;
+  is_open: boolean;
+  closed_message: string;
+  updated_at: string;
 }
 
 export type PaymentMethod = 'UPI' | 'COD';

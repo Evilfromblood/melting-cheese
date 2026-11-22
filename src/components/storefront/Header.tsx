@@ -14,6 +14,8 @@ export const Header: React.FC = () => {
   const phone = process.env.NEXT_PUBLIC_RESTAURANT_PHONE || '918090485140';
 
   const [customerUser, setCustomerUser] = useState<SupabaseUser | null>(null);
+  const [isStoreOpen, setIsStoreOpen] = useState(true);
+  const [closedMessage, setClosedMessage] = useState('Kitchen is currently closed. Opens at 11:00 AM!');
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -26,21 +28,58 @@ export const Header: React.FC = () => {
       }
     );
 
+    // Fetch store settings
+    supabase
+      .from('store_settings')
+      .select('is_open, closed_message')
+      .eq('id', 1)
+      .single()
+      .then(({ data }) => {
+        if (data) {
+          if (typeof data.is_open === 'boolean') setIsStoreOpen(data.is_open);
+          if (data.closed_message) setClosedMessage(data.closed_message);
+        }
+      });
+
+    // Realtime listener for store_settings
+    const channel = supabase
+      .channel('public:store_settings_header')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'store_settings' },
+        (payload) => {
+          if (payload.new && typeof payload.new === 'object') {
+            const row = payload.new as { is_open?: boolean; closed_message?: string };
+            if (typeof row.is_open === 'boolean') setIsStoreOpen(row.is_open);
+            if (row.closed_message) setClosedMessage(row.closed_message);
+          }
+        }
+      )
+      .subscribe();
+
     return () => {
       subscription.unsubscribe();
+      supabase.removeChannel(channel);
     };
   }, [supabase]);
 
   return (
     <header className="sticky top-0 z-30 bg-[#161619]/95 backdrop-blur-md border-b border-stone-800 shadow-lg">
-      {/* Top Banner Notice with Promo & WhatsApp Business verification */}
-      <div className="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-stone-950 text-xs font-black py-1 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-0.5 shadow-sm">
-        <span>🧀 PROMO: <span className="bg-stone-950 text-amber-400 px-1.5 py-0.2 rounded font-mono text-[10px]">DIRECT50</span> for ₹50 OFF + FREE Fries on ₹299+</span>
-        <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-stone-950/90">
-          <CheckCircle2 className="w-3.5 h-3.5 fill-stone-950 text-amber-400 inline" />
-          <span>WhatsApp Business: +91 8090485140</span>
-        </span>
-      </div>
+      {/* Top Banner Notice: Promo or Closed Banner */}
+      {!isStoreOpen ? (
+        <div className="bg-rose-600 text-white text-xs font-bold py-1.5 px-4 text-center shadow-sm flex items-center justify-center gap-2">
+          <span>⛔</span>
+          <span>{closedMessage}</span>
+        </div>
+      ) : (
+        <div className="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-stone-950 text-xs font-black py-1 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-0.5 shadow-sm">
+          <span>🧀 PROMO: <span className="bg-stone-950 text-amber-400 px-1.5 py-0.2 rounded font-mono text-[10px]">DIRECT50</span> for ₹50 OFF + FREE Fries on ₹299+</span>
+          <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-stone-950/90">
+            <CheckCircle2 className="w-3.5 h-3.5 fill-stone-950 text-amber-400 inline" />
+            <span>WhatsApp Business: +91 8090485140</span>
+          </span>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
         {/* Custom Brand Logo */}
@@ -51,13 +90,22 @@ export const Header: React.FC = () => {
 
           {/* Delivery & Status badges */}
           <div className="mt-1 flex items-center gap-2 text-[11px] text-stone-300">
-            <div className="flex items-center gap-1 text-emerald-400 font-semibold">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span>Open</span>
-            </div>
+            {isStoreOpen ? (
+              <div className="flex items-center gap-1 text-emerald-400 font-semibold">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span>Open</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1 text-rose-400 font-semibold">
+                <span className="relative flex h-2 w-2">
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                </span>
+                <span>Closed</span>
+              </div>
+            )}
             <span className="text-stone-600">•</span>
             <div className="flex items-center gap-1 text-stone-400">
               <Clock className="w-3 h-3" />
